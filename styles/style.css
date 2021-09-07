@@ -1,0 +1,28 @@
+.inputSection {
+  max-width: 300px;
+}
+
+#list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 300px;
+}
+#list li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+#list li p {
+  width: 100%;
+  padding-left: 20px;
+}
+#list li img {
+  height: 30px;
+  width: auto;
+}/*# sourceMappingURL=style.css.map */
