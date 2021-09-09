@@ -1,3 +1,7 @@
+body {
+  background-color: lightseagreen;
+}
+
 .inputSection {
   height: 80px;
   display: -webkit-box;
@@ -14,17 +18,30 @@
       justify-content: space-around;
 }
 .inputSection__text {
-  height: 20px;
+  height: 25px;
+  border-radius: 0.5em;
 }
 .inputSection__btn {
   width: 150px;
   height: 35px;
+  border-radius: 0.5em;
+  background-color: lightskyblue;
+  font-weight: 500;
+  font-size: 1.1em;
 }
 
+.listSection {
+  text-align: center;
+  min-width: 310px;
+  max-width: 500px;
+  margin: 0 auto;
+}
 .listSection #list {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 10px 0;
+  background-color: lightskyblue;
+  border-radius: 0.5em;
+  padding: 10px;
 }
 .listSection #list .list__item {
   display: -webkit-box;
@@ -33,9 +50,19 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  border-bottom: 1px solid gray;
+}
+.listSection #list .list__item:last-child {
+  border: none;
 }
 .listSection #list .list__item--taskValue {
+  width: 100%;
+  background-color: lightskyblue;
+  height: 30px;
   border: none;
+  margin: 5px;
+  padding-left: 5px;
+  font-size: 1.2em;
 }
 .listSection #list .list__item--wastebin {
   height: 30px;
@@ -44,4 +71,5 @@
 
 .checked {
   text-decoration: line-through;
+  opacity: 0.7;
 }/*# sourceMappingURL=style.css.map */
