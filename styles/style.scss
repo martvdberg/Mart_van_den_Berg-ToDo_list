@@ -1,23 +1,37 @@
 .inputSection {
-  max-width: 300px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  &__text {
+    height: 20px;
+  }
+  &__btn {
+    width: 150px;
+    height: 35px;
+  }
 }
-#list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-width: 300px;
 
-  & li {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    & p {
-      width: 100%;
-      padding-left: 20px;
-    }
-    & img {
-      height: 30px;
-      width: auto;
+.listSection {
+  & #list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    & .list__item {
+      display: flex;
+      align-items: center;
+
+      &--taskValue {
+        border: none;
+      }
+      &--wastebin {
+        height: 30px;
+        width: auto;
+      }
     }
   }
+}
+.checked {
+  text-decoration: line-through;
 }

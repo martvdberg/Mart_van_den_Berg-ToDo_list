@@ -18,7 +18,6 @@ const deleteTask = async (index) => {
 
 const updateTask = async (index) => {
   const fullTask = await findTaskID(index);
-
   let updatedTask = { task: fullTask.task, done: fullTask.done };
   if (fullTask.done === false) {
     updatedTask = { done: true };
@@ -27,6 +26,24 @@ const updateTask = async (index) => {
   }
   await putToDoItem(fullTask._id, updatedTask);
   buildDom();
+};
+
+const updateText = async (task, index) => {
+  const fullTask = await findTaskID(index);
+  const updatedTask = { task: task.value, done: fullTask.done };
+  await putToDoItem(fullTask._id, updatedTask);
+  buildDom();
+};
+
+const changeTaskValue = async (task, index) => {
+  task.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      // updateTask met nieuwe task value
+      updateText(task, index);
+    } else if (event.key === "Escape") {
+      buildDom();
+    }
+  });
 };
 
 // find task ID
@@ -43,25 +60,26 @@ const buildDom = async () => {
   list.innerHTML = "";
 
   listOfTasks.forEach((task) => {
-    // create li and checkbox
+    // create li, checkbox, text field and delete img.
     const newLi = document.createElement("li");
     const newCheckbox = document.createElement("input");
     newCheckbox.setAttribute("type", "checkbox");
-    const newTextElement = document.createElement("p");
+    const newTextElement = document.createElement("input");
+    newTextElement.setAttribute("type", "text");
     const newWastebin = document.createElement("img");
 
-    // set inner vale and classes
-    newTextElement.innerText = task.task;
+    // set classes and inner values
+    newLi.classList.add("list__item");
+    newCheckbox.classList.add("list__item--checkbox");
+    newTextElement.classList.add("list__item--taskValue");
+    newWastebin.classList.add("list__item--wastebin");
+    newTextElement.value = task.task;
     newWastebin.setAttribute("src", "./img/wastebin.png");
-
-    // set the wastebin and checkbox value attribute to task value,makes it easy to use it to find the task ID
-    // newWastebin.setAttribute("value", task.task);
-    // newCheckbox.setAttribute("value", task.task);
-    newWastebin.classList.add("wastebin");
 
     // check checkbox if task status is done
     if (task.done === true) {
       newCheckbox.checked = true;
+      newTextElement.classList.add("checked");
     }
 
     // add li and checkbox and img to the list
@@ -77,19 +95,30 @@ const buildDom = async () => {
 // Add eventlistners for all the chackboxes and wastebins
 const EventlistnerForListItems = () => {
   const checkboxes = Array.from(
-    document.querySelectorAll("input[type=checkbox]")
+    document.querySelectorAll(".list__item--checkbox")
   );
-  const wasteBins = Array.from(document.querySelectorAll(".wastebin"));
-
-  wasteBins.forEach((bin, index) => {
-    bin.addEventListener("click", () => {
-      deleteTask(index);
-    });
-  });
+  const wasteBins = Array.from(
+    document.querySelectorAll(".list__item--wastebin")
+  );
+  const taskValue = Array.from(
+    document.querySelectorAll(".list__item--taskValue")
+  );
 
   checkboxes.forEach((box, index) => {
     box.addEventListener("change", () => {
       updateTask(index);
+    });
+  });
+
+  taskValue.forEach((task, index) => {
+    task.addEventListener("click", () => {
+      changeTaskValue(task, index);
+    });
+  });
+
+  wasteBins.forEach((bin, index) => {
+    bin.addEventListener("click", () => {
+      deleteTask(index);
     });
   });
 };

@@ -1,28 +1,47 @@
 .inputSection {
-  max-width: 300px;
-}
-
-#list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-width: 300px;
-}
-#list li {
+  height: 80px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   -ms-flex-pack: distribute;
       justify-content: space-around;
 }
-#list li p {
-  width: 100%;
-  padding-left: 20px;
+.inputSection__text {
+  height: 20px;
 }
-#list li img {
+.inputSection__btn {
+  width: 150px;
+  height: 35px;
+}
+
+.listSection #list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.listSection #list .list__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.listSection #list .list__item--taskValue {
+  border: none;
+}
+.listSection #list .list__item--wastebin {
   height: 30px;
   width: auto;
+}
+
+.checked {
+  text-decoration: line-through;
 }/*# sourceMappingURL=style.css.map */
