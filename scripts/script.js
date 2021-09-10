@@ -1,11 +1,11 @@
-// Functions for adding, delete and change the task in the database
+// Functions to add, delete or update a task in the database
 const addTask = async () => {
   const inputText = findInputValue();
   if (inputText === "") {
     return;
   } else {
-    const toDoObj = { task: inputText, done: false };
-    await postToDoItem(toDoObj);
+    const taskObj = { task: inputText, done: false };
+    await postToDoItem(taskObj);
     buildDom();
   }
 };
@@ -16,34 +16,25 @@ const deleteTask = async (index) => {
   buildDom();
 };
 
-const updateTask = async (index) => {
+const updateTask = async (item, index) => {
   const fullTask = await findTaskID(index);
-  let updatedTask = { task: fullTask.task, done: fullTask.done };
-  if (fullTask.done === false) {
-    updatedTask = { done: true };
-  } else {
-    updatedTask = { done: false };
+  let update = {};
+  switch (item.type) {
+    case "checkbox":
+      switch (fullTask.done) {
+        case false:
+          update = { task: fullTask.task, done: true };
+          break;
+        case true:
+          update = { task: fullTask.task, done: false };
+      }
+      break;
+    case "text":
+      update = { task: item.value, done: fullTask.done };
+      break;
   }
-  await putToDoItem(fullTask._id, updatedTask);
+  await putToDoItem(fullTask._id, update);
   buildDom();
-};
-
-const updateText = async (task, index) => {
-  const fullTask = await findTaskID(index);
-  const updatedTask = { task: task.value, done: fullTask.done };
-  await putToDoItem(fullTask._id, updatedTask);
-  buildDom();
-};
-
-const changeTaskValue = async (task, index) => {
-  task.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      // updateTask met nieuwe task value
-      updateText(task, index);
-    } else if (event.key === "Escape") {
-      buildDom();
-    }
-  });
 };
 
 // find task ID
@@ -53,74 +44,80 @@ const findTaskID = async (index) => {
   return task;
 };
 
+// Create complete li element for a task
+const createCompleteLi = (task) => {
+  const newLi = document.createElement("li");
+  const newCheckbox = document.createElement("input");
+  const newTextElement = document.createElement("input");
+  const newWastebin = document.createElement("img");
+
+  // set classes, inner values and attributes
+  newLi.classList.add("list__item");
+  newCheckbox.classList.add("list__item--checkbox");
+  newTextElement.classList.add("list__item--taskValue");
+  newWastebin.classList.add("list__item--wastebin");
+  newCheckbox.setAttribute("type", "checkbox");
+  newTextElement.setAttribute("type", "text");
+  newWastebin.setAttribute("src", "./img/wastebin.png");
+
+  if (task.done === true) {
+    newCheckbox.checked = true;
+    newTextElement.classList.add("checked");
+  }
+  newTextElement.value = task.task;
+
+  // build the complete li
+  newLi.appendChild(newCheckbox);
+  newLi.appendChild(newTextElement);
+  newLi.appendChild(newWastebin);
+  return newLi;
+};
+
 // Function to build the DOM with all the tasks in the database
 const buildDom = async () => {
-  const listOfTasks = await getToDoList();
+  const allTasks = await getToDoList();
   const list = document.querySelector("#list");
   list.innerHTML = "";
 
-  listOfTasks.forEach((task) => {
-    // create li, checkbox, text field and delete img.
-    const newLi = document.createElement("li");
-    const newCheckbox = document.createElement("input");
-    newCheckbox.setAttribute("type", "checkbox");
-    const newTextElement = document.createElement("input");
-    newTextElement.setAttribute("type", "text");
-    const newWastebin = document.createElement("img");
-
-    // set classes and inner values
-    newLi.classList.add("list__item");
-    newCheckbox.classList.add("list__item--checkbox");
-    newTextElement.classList.add("list__item--taskValue");
-    newWastebin.classList.add("list__item--wastebin");
-    newTextElement.value = task.task;
-    newWastebin.setAttribute("src", "./img/wastebin.png");
-
-    // check checkbox if task status is done
-    if (task.done === true) {
-      newCheckbox.checked = true;
-      newTextElement.classList.add("checked");
-    }
-
-    // add li and checkbox and img to the list
-    newLi.appendChild(newCheckbox);
-    newLi.appendChild(newTextElement);
-    newLi.appendChild(newWastebin);
-    list.appendChild(newLi);
+  allTasks.forEach((task) => {
+    list.appendChild(createCompleteLi(task));
   });
-  // add eventlistners to the wasteBins and checkboxes
+  // add eventlistners to the checkboxes the text fields and the wastebins
   EventlistnerForListItems();
 };
 
-// Add eventlistners for all the chackboxes and wastebins
+// Add eventlistners for all the checkboxes, text fields and wastebins
 const EventlistnerForListItems = () => {
-  const checkboxes = Array.from(
-    document.querySelectorAll(".list__item--checkbox")
-  );
-  const wasteBins = Array.from(
-    document.querySelectorAll(".list__item--wastebin")
-  );
-  const taskValue = Array.from(
-    document.querySelectorAll(".list__item--taskValue")
+  Array.from(document.querySelectorAll(".list__item--checkbox")).forEach(
+    (checkbox, index) => {
+      checkbox.addEventListener("change", () => {
+        updateTask(checkbox, index);
+      });
+    }
   );
 
-  checkboxes.forEach((box, index) => {
-    box.addEventListener("change", () => {
-      updateTask(index);
-    });
-  });
+  Array.from(document.querySelectorAll(".list__item--taskValue")).forEach(
+    (task, index) => {
+      task.addEventListener("click", () => {
+        // add an extra eventlistner for when the input is enter to submit or escape to exit
+        task.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            updateTask(task, index);
+          } else if (event.key === "Escape") {
+            buildDom();
+          }
+        });
+      });
+    }
+  );
 
-  taskValue.forEach((task, index) => {
-    task.addEventListener("click", () => {
-      changeTaskValue(task, index);
-    });
-  });
-
-  wasteBins.forEach((bin, index) => {
-    bin.addEventListener("click", () => {
-      deleteTask(index);
-    });
-  });
+  Array.from(document.querySelectorAll(".list__item--wastebin")).forEach(
+    (wastebin, index) => {
+      wastebin.addEventListener("click", () => {
+        deleteTask(index);
+      });
+    }
+  );
 };
 
 // Collect the value of the input field

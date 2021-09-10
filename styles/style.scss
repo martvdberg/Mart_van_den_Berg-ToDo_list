@@ -1,5 +1,5 @@
 body {
-  background-color: lightseagreen;
+  background-color: rgb(28, 168, 161);
 }
 .inputSection {
   height: 80px;
@@ -7,32 +7,35 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+
   &__text {
     height: 25px;
     border-radius: 0.5em;
   }
+
   &__btn {
     width: 150px;
     height: 35px;
+    background-color: rgb(134, 204, 248);
     border-radius: 0.5em;
-    background-color: lightskyblue;
-    font-weight: 500;
     font-size: 1.1em;
+    font-weight: 500;
   }
 }
 
 .listSection {
-  text-align: center;
   min-width: 310px;
   max-width: 500px;
   margin: 0 auto;
+  text-align: center;
 
   & #list {
     list-style: none;
     margin: 10px 0;
-    background-color: lightskyblue;
-    border-radius: 0.5em;
     padding: 10px;
+    border-radius: 0.5em;
+    background-color: rgb(134, 204, 248);
+
     & .list__item {
       display: flex;
       align-items: center;
@@ -42,14 +45,13 @@ body {
       }
 
       &--taskValue {
-        // max-width: 200px;
         width: 100%;
-        background-color: lightskyblue;
         height: 30px;
-        border: none;
         margin: 5px;
         padding-left: 5px;
+        background-color: rgb(134, 204, 248);
         font-size: 1.2em;
+        border: none;
       }
 
       &--wastebin {

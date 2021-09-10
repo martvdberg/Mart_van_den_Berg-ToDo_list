@@ -1,8 +1,8 @@
-const APIurl = "http://localhost:3000/";
+const APIurl = "http://localhost:3000";
 
 const getToDoList = async () => {
   try {
-    const response = await fetch(`${APIurl}`, {
+    const response = await fetch(`${APIurl}/23`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -16,7 +16,7 @@ const getToDoList = async () => {
 
 const postToDoItem = async (bodyData) => {
   try {
-    const response = await fetch(`${APIurl}`, {
+    const response = await fetch(`${APIurl}/`, {
       method: "POST",
       body: JSON.stringify(bodyData),
       headers: {
@@ -31,7 +31,7 @@ const postToDoItem = async (bodyData) => {
 
 const putToDoItem = async (itemID, bodyData) => {
   try {
-    const response = await fetch(`${APIurl}${itemID}`, {
+    const response = await fetch(`${APIurl}/${itemID}`, {
       method: "put",
       body: JSON.stringify(bodyData),
       headers: {
@@ -46,7 +46,7 @@ const putToDoItem = async (itemID, bodyData) => {
 
 const deleteToDoItem = async (itemID) => {
   try {
-    const response = await fetch(`${APIurl}${itemID}`, {
+    const response = await fetch(`${APIurl}/${itemID}`, {
       method: "delete",
       headers: {
         "Content-Type": "appplication/json",
