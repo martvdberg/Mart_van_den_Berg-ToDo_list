@@ -2,7 +2,7 @@ const APIurl = "http://localhost:3000";
 
 const getToDoList = async () => {
   try {
-    const response = await fetch(`${APIurl}/23`, {
+    const response = await fetch(`${APIurl}/`, {
       headers: {
         "Content-Type": "application/json",
       },
